@@ -95,7 +95,7 @@ class BlockEditorController extends BaseController
                         array(
                             'url' => 'elements/original/'.$args['name'].'-'.$section->id.'.ehtml',
                             'height' => '701',
-                            'thumbnail' => 'elements/thumbs/'.$args['name'].'-'.$section->id.'.png'
+                            'thumbnail' => 'elements/thumbs/dragme.svg'
                         )
                     );
                 }

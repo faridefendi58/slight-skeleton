@@ -71,9 +71,8 @@ class Application
         return $update;
     }
     
-    public function createDb($data, $settings)
+    public function createDb($data)
     {
-        $base_model = new \Model\BaseModel( ['settings'=>$settings] );
         if (!file_exists(realpath(dirname(__DIR__)).'/data/schema.mysql')) {
             return false;
         }

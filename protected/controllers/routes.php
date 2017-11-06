@@ -134,7 +134,7 @@ $app->post('/install', function ($request, $response, $args) {
             if (!empty($uri->getPort()))
                 $_POST['base_url'] .= ':'.$uri->getPort();
 
-            $createDb = $application->createDb( $_POST, $settings );
+            $createDb = $application->createDb( $_POST );
 
             return $this->response->withRedirect( 'index' );
         }

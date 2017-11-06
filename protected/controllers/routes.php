@@ -15,6 +15,11 @@ $app->get('/[{name}]', function ($request, $response, $args) {
 		$args['name'] = 'index';
 
     $settings = $this->get('settings');
+
+    if (!is_array($settings['db'])) {
+        return $this->response->withRedirect( 'install.php' );
+    }
+
     if (!file_exists($settings['theme']['path'].'/'.$settings['theme']['name'].'/views/'.$args['name'].'.phtml')) {
         return $this->response
             ->withStatus(500)
@@ -110,4 +115,33 @@ $app->post('/tracking', function ($request, $response, $args) {
 
         exit;
     }
+});
+
+$app->post('/install', function ($request, $response, $args) {
+    $settings = $this->get('settings');
+
+    if (is_array($settings['db'])) {
+        return $this->response->withRedirect( 'index' );
+    }
+    
+    if (isset($_POST['host']) && isset($_POST['dbname']) && isset($_POST['username'])) {
+        $application = new \Components\Application();
+        $setDb = $application->setDb( $_POST );
+
+        if ($setDb) {
+            $uri = $request->getUri();
+            $_POST['base_url'] = $uri->getScheme().'://'.$uri->getHost().$uri->getBasePath();
+            if (!empty($uri->getPort()))
+                $_POST['base_url'] .= ':'.$uri->getPort();
+
+            $createDb = $application->createDb( $_POST );
+
+            return $this->response->withRedirect( 'index' );
+        }
+    }
+
+    return $this->response
+        ->withStatus(500)
+        ->withHeader('Content-Type', 'text/html')
+        ->write('Page not found!');
 });

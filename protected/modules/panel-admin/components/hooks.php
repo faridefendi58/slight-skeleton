@@ -20,6 +20,13 @@ class AdminHooks
             $params_path = $this->basePath.'/data/configs.json';
             if (!file_exists($params_path)){
                 $file = fopen($params_path, 'w');
+            } else {
+                $contents = file_get_contents( $params_path );
+                $contents = json_decode( $contents, true );
+                //the db
+                if (isset($contents['db'])) {
+                    $data['db'] = $contents['db'];
+                }
             }
             $update = file_put_contents($params_path, json_encode($data));
 
